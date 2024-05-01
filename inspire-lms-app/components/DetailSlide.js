@@ -1,8 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { useNavigation } from '@react-navigation/native';
 export const DetailSlide = () => {
+    const navigation = useNavigation();
+
+    const goToLogin = () => {
+        navigation.navigate('Login');
+    };
     return (
         <LinearGradient
             colors={['#281483', '#8F6ED5', '#D782D9']}
@@ -21,12 +26,15 @@ export const DetailSlide = () => {
                 <View style={[styles.circle, { backgroundColor: '#8F6ED5', bottom: 150, left: 20 }]} />
                 <View style={[styles.circle, { bottom: 50, right: 20, backgroundColor: '#8F6ED5' }]} />
                 <View style={styles.textContainer}>
-                    <Text style={styles.text}>Pick a Course and</Text>
-                    <Text style={[styles.text, { color: '#281483' }]}>Get Results!</Text>
+                    <Text style={styles.text}>Professionalism, Passion, and Love for Education - the pillars of success at Inspire Management Training Centre</Text>
+                    <Text style={[styles.text, { color: '#281483' }]}></Text>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Get Started</Text>
+                <View style={styles.slideButtonContainer}>
+                    <TouchableOpacity style={[styles.slideButton, { marginLeft: '-2%' }]}>
+                        <Text style={styles.buttonText} onPress={() => goToLogin()}>Sign In</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.slideButton, { marginRight: '-2%', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius: 50, borderBottomLeftRadius: 50 }]}>
+                        <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -61,7 +69,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        fontSize: 50,
+        fontSize: 20,
         fontWeight: 'bold',
     },
     textContainer: {
@@ -93,5 +101,22 @@ const styles = StyleSheet.create({
         color: '#fff', // Button text color
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    slideButtonContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        bottom: '20%',
+    },
+    slideButton: {
+        backgroundColor: '#281483', // Button background color
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        marginHorizontal: 10,
+        borderTopRightRadius: 50,
+        borderBottomRightRadius: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '35%',
     }
 });
