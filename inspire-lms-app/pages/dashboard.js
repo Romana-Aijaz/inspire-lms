@@ -1,22 +1,37 @@
 import {
-    View, Text, StyleSheet, SafeAreaView, ScrollView, } from "react-native";
+    View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Image,  StatusBar
+} from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import { Avatar, Badge } from '@rneui/themed';
-import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { Avatar, Badge, ButtonGroup, SearchBar, Icon } from '@rneui/themed';
 import { useState } from "react";
-import { SearchBar } from '@rneui/themed';
+import Svg, {
+    Use,
+    Image as SvgImage, Circle, SvgUri
+} from 'react-native-svg';
 
+import TabMenu from "../components/TabMenu";
 export const Dashboard = () => {
-    const [visible, setVisible] = useState(true);
-
-    const openMenu = () => setVisible(true);
-
-    const closeMenu = () => setVisible(false);
     const [search, setSearch] = useState("");
-
     const updateSearch = (search) => {
         setSearch(search);
     };
+    const [selectedTab, setSelectedTab] = useState(0);
+    const tabs = ['In progress', 'Explore', 'Incoming'];
+
+    const handleTabSelect = (index) => {
+        setSelectedTab(index);
+    };
+    const cardsData = [
+        { id: 1, title: "Adobe Illustrator", description: "Description for Card 1", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/adobe.svg" },
+        { id: 2, title: "Python", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/python.svg" },
+        { id: 3, title: "Problem Solving", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/raleigh.svg" },
+        { id: 4, title: "Time Management", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/dst.svg"},
+        { id: 5, title: "Adobe Illustrator", description: "Description for Card 1", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/adobe.svg" },
+        { id: 6, title: "Python", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/python.svg" },
+        { id: 7, title: "Problem Solving", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/raleigh.svg" },
+        { id: 8, title: "Time Management", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/dst.svg" }
+        // Add more cards as needed
+    ];
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -31,33 +46,18 @@ export const Dashboard = () => {
                             size={64}
                             rounded
                             source={{ uri: 'https://randomuser.me/api/portraits/women/57.jpg' }}
-                            title="Bj"
+                            title="SK"
                             containerStyle={{ backgroundColor: 'grey' }}
                         />
                         <Badge
                             status="success"
-                            containerStyle={{ position: 'absolute', top: 33, left: 78 }}
+                            containerStyle={{ position: 'absolute', top: 40, left: 78 }}
                         />
                     </View>
                     <View style={styles.menu}>
-                        <Provider>
-                            <View
-                                style={{
-                                    paddingTop: 50,
-                                    flexDirection: 'row',
-                                    justifyContent: 'center',
-                                }}>
-                                <Menu
-                                    visible={visible}
-                                    onDismiss={closeMenu}
-                                    anchor={<Button onPress={openMenu}>Show menu</Button>}>
-                                    <Menu.Item onPress={() => { }} title="Item 1" />
-                                    <Menu.Item onPress={() => { }} title="Item 2" />
-                                    <Divider />
-                                    <Menu.Item onPress={() => { }} title="Item 3" />
-                                </Menu>
-                            </View>
-                        </Provider>
+                        <TouchableOpacity>
+                            <Icon name="menu" size={30} color={'white'}/>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.nameHeadingContainer}>
@@ -69,9 +69,10 @@ export const Dashboard = () => {
                         inputContainerStyle={{
                             backgroundColor: 'white',
                         }}
-                        containerStyle={{backgroundColor: 'white', 
+                        containerStyle={{
+                            backgroundColor: 'white',
                             width: '95%',
-                            borderRadius: 10
+                            borderRadius: 30
                         }}
                         lightTheme={true}
                         round={true}
@@ -82,22 +83,33 @@ export const Dashboard = () => {
                     />
                 </View>
             </LinearGradient>
-            <SafeAreaView style={styles.container}>
-                <ScrollView style={styles.scrollView}>
-                    <Text style={styles.text}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.
-                    </Text>
-                </ScrollView>
+                <TabMenu tabs={tabs} selectedTab={selectedTab} onSelect={handleTabSelect} />
+            <SafeAreaView style={styles.safeAreaViewContainer}>
+            <ScrollView style={styles.cardsContainer}>
+                {cardsData.map((card) => (
+                    <TouchableOpacity key={card.id} style={styles.card}>
+                        <View style={styles.cardIcon}>
+                            {/* <Image source={require('../assets/adobe.png')} style={styles.iconImage} /> */}
+                            <Svg width="80" height="80" viewBox="0 0 100 100" >
+                                <SvgUri
+                                    width="100%"
+                                    height="100%"
+                                    uri={card.image}
+                                />
+                            </Svg>
+                        </View>
+                        <View key={card.id} style={styles.cardTextContainer}>
+                            <Text style={styles.cardTitle}>{card.title}</Text>
+                            <Text style={styles.cardDescription}>{card.description}</Text>
+                        </View>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
             </SafeAreaView>
         </View>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -119,34 +131,81 @@ const styles = StyleSheet.create({
     },
     iconLady: {
         backgroundColor: 'white',
-        height: '55%',
+        height: '90%',
         width: '30%',
         borderBottomRightRadius: 100,
         borderBottomLeftRadius: 50,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        left: -10,
+        top: -10
     },
     menu: {
-        borderWidth: 5,
         height: '35%',
         width: '30%',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        top: 30,
+        left: 20
     },
     nameHeadingContainer: {
-        top: -80,
+        top: -20,
         padding: 10,
     },
     nameHeadingText: {
         color: '#fff', // Button text color
         fontSize: 40,
-        fontWeight: 'semi-bold',
     },
     searchBarContainer: {
-        top: -70,
+        top: -10,
         alignItems: 'center'
     },
     searchBar: {
         backgroundColor: 'white'
+    },
+    cardsContainer: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%'
+    },
+    card: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 10,
+        elevation: 3, // for Android shadow
+        shadowColor: 'black', // for iOS shadow
+        shadowOffset: { width: 0, height: 2 }, // for iOS shadow
+        shadowOpacity: 0.1, // for iOS shadow
+        shadowRadius: 3, // for iOS shadow
+    },
+    cardIcon: {
+        marginRight: 15,
+    },
+    cardTextContainer: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    cardDescription: {
+        fontSize: 16,
+        marginTop: 5,
+    },
+    iconImage: {
+        width: 50, // Adjust width and height as needed
+        height: 50,
+        borderRadius: 10
+    },
+    safeAreaViewContainer: {
+        flex: 1,
+        position:'absolute',
+        width: '100%',
+        height: '50%',
+        top: '50%'
     }
 });
