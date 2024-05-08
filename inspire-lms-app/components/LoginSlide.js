@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+
 export const LoginSlide = () => {
     const navigation = useNavigation();
 
@@ -23,7 +24,13 @@ export const LoginSlide = () => {
                 <View style={[styles.circle, { backgroundColor: '#8F6ED5', bottom: 150, left: 20 }]} />
                 <View style={[styles.circle, { bottom: 50, right: 20, backgroundColor: '#8F6ED5' }]} />
                 <View style={styles.textContainer}>
-                    <Text style={[styles.text, { alignSelf: 'center' }]}>logo</Text>
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={require('../assets/iwaves.png')} // Assuming iwaves.png is in the same directory
+                            style={styles.imageStyle}
+                            resizeMode="contain" // Adjust resizeMode based on your image aspect ratio
+                        />
+                    </View>
                 </View>
                 <View style={styles.slideButtonContainer}>
                     <TouchableOpacity style={[styles.slideButton, { marginLeft: '-2%' }]}>
@@ -60,8 +67,7 @@ const styles = StyleSheet.create({
     textContainer: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'left',
-        height: 40,
+        alignItems: 'center',
         padding: '5%',
     },
     buttonContainer: {
@@ -100,5 +106,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '35%',
+    },
+    imageStyle: {
+        height: '60%',
+        top: '10%'
+    },
+    imageContainer: {
+        alignItems: 'center',
     }
 });

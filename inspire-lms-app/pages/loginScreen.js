@@ -42,7 +42,7 @@ export const LoginScreen = ({navigation}) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Welcome")}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("TabNavigator")}>
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
             </View>

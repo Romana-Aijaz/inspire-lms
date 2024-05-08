@@ -45,7 +45,7 @@ export const Dashboard = () => {
                         <Avatar
                             size={64}
                             rounded
-                            source={{ uri: 'https://randomuser.me/api/portraits/women/57.jpg' }}
+                            source={{ uri: 'https://randomuser.me/api/portraits/women/90.jpg' }}
                             title="SK"
                             containerStyle={{ backgroundColor: 'grey' }}
                         />
@@ -62,7 +62,7 @@ export const Dashboard = () => {
                 </View>
                 <View style={styles.nameHeadingContainer}>
                     <Text style={styles.nameHeadingText}>Welcome back,</Text>
-                    <Text style={styles.nameHeadingText}>Shakira!</Text>
+                    <Text style={styles.nameHeadingText}>Romana!</Text>
                 </View>
                 <View style={styles.searchBarContainer}>
                     <SearchBar
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     },
     nameHeadingText: {
         color: '#fff', // Button text color
-        fontSize: 40,
+        fontSize: 30,
     },
     searchBarContainer: {
         top: -10,

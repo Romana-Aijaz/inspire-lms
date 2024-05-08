@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { WelcomeSlide } from './WelcomeSlide';
-import { Courses } from './Courses';
+import { Profile } from './Profile';
 import { Dashboard } from '../pages/dashboard';
 import { Icon } from '@rneui/themed';
 const Tab = createBottomTabNavigator();
@@ -20,7 +19,7 @@ const TabNavigator = () => {
                 },
             }} />
             
-            <Tab.Screen name="Profile" component={Courses} options={{
+            <Tab.Screen name="Profile" component={Profile} options={{
                 tabBarIcon: ({ color, size }) => (
                     <Icon name="people" size={30} color={'gray'} />
                 ),
