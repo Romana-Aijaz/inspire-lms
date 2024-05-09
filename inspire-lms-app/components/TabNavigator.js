@@ -8,7 +8,8 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
     return (
         <Tab.Navigator screenOptions={{
-            headerShown: false }}>
+            headerShown: false
+        }} detachInactiveScreens={false}>
             <Tab.Screen name="Home" component={Dashboard} options={{
                 tabBarIcon: ({ color, size }) => (
                     <Icon name="home" size={30} color={'gray'} />

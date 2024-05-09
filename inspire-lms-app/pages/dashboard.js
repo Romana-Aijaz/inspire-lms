@@ -51,7 +51,7 @@ export const Dashboard = () => {
                         />
                         <Badge
                             status="success"
-                            containerStyle={{ position: 'absolute', top: 40, left: 78 }}
+                            containerStyle={{ position: 'absolute', top: 40, left: 75 }}
                         />
                     </View>
                     <View style={styles.menu}>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     },
     iconLady: {
         backgroundColor: 'white',
-        height: '90%',
+        height: '80%',
         width: '30%',
         borderBottomRightRadius: 100,
         borderBottomLeftRadius: 50,

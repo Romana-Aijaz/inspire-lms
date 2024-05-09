@@ -54,6 +54,28 @@ export const Profile = () => {
                             <Text style={styles.infoText}>77208135</Text>
                         </View>
                     </View>
+                    <View style={styles.listCardContainer}>
+                        <View style={styles.listCard}>
+                            <View style={styles.listCardIconContainer}><Icon name="map" color={'#8F6ED5'} /></View>
+                            <View style={styles.listCardTextContainer}><Text style={styles.listCardText}>Education Information</Text></View>
+                            <View style={styles.listCardArrowContainer}><Icon name="arrow-right" size={30} /></View>
+                        </View>
+                        <View style={styles.listCard}>
+                            <View style={[styles.listCardIconContainer, {backgroundColor: '#CCFFE5'}]}><Icon name="wallet" color={'#006633'} /></View>
+                            <View style={styles.listCardTextContainer}><Text style={styles.listCardText}>Subscription Pack</Text></View>
+                            <View style={styles.listCardArrowContainer}><Icon name="arrow-right" size={30} /></View>
+                        </View>
+                        <View style={styles.listCard}>
+                            <View style={[styles.listCardIconContainer, { backgroundColor: '#CCE5FF' }]}><Icon name="credit-card" color={'#0080FF'} /></View>
+                            <View style={styles.listCardTextContainer}><Text style={styles.listCardText}>Payment History</Text></View>
+                            <View style={styles.listCardArrowContainer}><Icon name="arrow-right" size={30} /></View>
+                        </View>
+                        <View style={[styles.listCard, { borderBottomWidth: 0 }]}>
+                            <View style={[styles.listCardIconContainer, { backgroundColor: '#FFE5CC' }]}><Icon name="logout" color={'#FF8000'} /></View>
+                            <View style={styles.listCardTextContainer}><Text style={styles.listCardText}>Logout</Text></View>
+                            <View style={styles.listCardArrowContainer}><Icon name="arrow-right" size={30} /></View>
+                        </View>
+                    </View>
                 </View>
             </LinearGradient>
         </View>
@@ -156,5 +178,53 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         top: 5
+    },
+    listCardContainer: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: -2, // Changed to negative value
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        backgroundColor: '#fff',
+        padding: 10,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        top: 30
+    },
+    listCard: {
+        backgroundColor: 'white',
+        height: 50,
+        marginBottom: 10,
+        borderRadius: 10,
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10,
+        paddingBottom: 15
+    },
+    listCardIconContainer: {
+        backgroundColor: '#CCCCFF',
+        borderRadius: 7,
+        width: '12%',
+        height: '150%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    listCardTextContainer: {
+        width: '70%',
+        alignItems: 'left'
+    },
+    listCardArrowContainer: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    listCardText: {
+        fontSize: 18,
+        fontWeight: 'bold'
     }
 });
