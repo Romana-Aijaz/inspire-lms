@@ -2,6 +2,8 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import Svg, {SvgUri} from 'react-native-svg';
+
 export const WelcomeSlide = () => {
     const navigation = useNavigation();
 
@@ -22,16 +24,25 @@ export const WelcomeSlide = () => {
                 <View style={[styles.circle, { backgroundColor: '#8F6ED5', top: 350, right: '50%' }]} />
                 <View style={[styles.circle, { backgroundColor: '#8F6ED5', bottom: 150, left: 20 }]} />
                 <View style={[styles.circle, { bottom: 50, right: 20, backgroundColor: '#8F6ED5' }]} />
+                <View style={styles.imgContainer}>
+                    <Svg width="140%" height="140%" viewBox="0 0 150 160">
+                        <SvgUri
+                            width="100%"
+                            height="100%"
+                            uri={"https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/alphachannel.svg"}
+                        />
+                    </Svg>
+                </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>Welcome to Inspire Management Training Centre</Text>
-                    <Text style={styles.subText}>Unlocking Potential, Transforming Teams</Text>
+                    <Text style={styles.subText}>We offer a tailored educational experience designed to empower professionals with cutting-edge skills and knowledge. Seamlessly integrating interactive modules, personalized learning paths, and real-world case studies, our platform ensures an engaging and effective training journey.</Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={[styles.button, {marginLeft: '-2%'}]}>
-                        <Text style={styles.buttonText} onPress={() => goToLogin()}>Sign In</Text>
+                    <TouchableOpacity style={[styles.button, { marginLeft: '-2%' }]} onPress={() => goToLogin()}>
+                        <Text style={styles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, { marginRight: '-2%', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius:50, borderBottomLeftRadius: 50 } ]}>
-                        <Text style={styles.buttonText}>Next</Text>
+                    <TouchableOpacity onPress={() => goToLogin()} style={[styles.button, { marginRight: '-2%', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius:50, borderBottomLeftRadius: 50 } ]}>
+                        <Text style={styles.buttonText}>Skip</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -58,11 +69,16 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
+        alignItems: 'center',
+        alignSelf:'center',
+        top: 60,
+        textAlign: 'center'
     },
     textContainer: {
         flex: 1,
+        position: 'absolute',
         justifyContent: 'center',
-        alignItems: 'left',
+        alignItems: 'center',
         height: '50%',
         padding: '5%',
     },
@@ -70,13 +86,15 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 10,
         fontWeight: 'bold',
-        marginLeft: 0
+        marginLeft: 0,
+        top: 65,
+        textAlign: 'center'
     },
     buttonContainer: {
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        bottom: '20%',
+        top: '80.35%',
     },
     button: {
         backgroundColor: '#281483', // Button background color
@@ -94,4 +112,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    imgContainer: {
+        position: 'absolute',
+        bottom: '60%',
+        width: '40%',
+        height: '20%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 });

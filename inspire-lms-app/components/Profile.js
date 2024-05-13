@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Icon, Avatar } from '@rneui/themed';
 
-export const Profile = () => {
+export const Profile = ({ navigation }) => {
+    const handleLogout = () => {
+       navigation.push('Login');
+    };
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -70,11 +73,13 @@ export const Profile = () => {
                             <View style={styles.listCardTextContainer}><Text style={styles.listCardText}>Payment History</Text></View>
                             <View style={styles.listCardArrowContainer}><Icon name="arrow-right" size={30} /></View>
                         </View>
-                        <View style={[styles.listCard, { borderBottomWidth: 0 }]}>
+                        <TouchableOpacity onPress={handleLogout}>
+                            <View style={[styles.listCard, { borderBottomWidth: 0 }]}>
                             <View style={[styles.listCardIconContainer, { backgroundColor: '#FFE5CC' }]}><Icon name="logout" color={'#FF8000'} /></View>
                             <View style={styles.listCardTextContainer}><Text style={styles.listCardText}>Logout</Text></View>
                             <View style={styles.listCardArrowContainer}><Icon name="arrow-right" size={30} /></View>
                         </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </LinearGradient>

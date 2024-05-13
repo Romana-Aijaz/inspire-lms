@@ -1,7 +1,35 @@
-import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet, Text, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+
+const users = [
+    { email: 'user1@example.com', password: 'password123' },
+    { email: 'user2@example.com', password: 'abc123' },
+    { email: 'user3@example.com', password: 'qwerty' },
+];
+
 export const LoginScreen = ({navigation}) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    // Function to handle login
+    const handleLogin = () => {
+        if (!email.trim() || !password.trim()) {
+            Alert.alert('Incomplete Information', 'Please fill in both email and password fields.');
+            return;
+        }
+
+        const user = users.find(user => user.email === email);
+        if (user) {
+            if (user.password === password) {
+                navigation.navigate("TabNavigator");
+            } else {
+                Alert.alert('Incorrect Password', 'Please enter the correct password.');
+            }
+        } else {
+            Alert.alert('Not Registered', 'You are not registered. Please sign up first.');
+        }
+    };
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -32,17 +60,18 @@ export const LoginScreen = ({navigation}) => {
                     placeholder="Email"
                     placeholderTextColor="#281483"
                     keyboardType="email-address"
-                />
-                
+                    onChangeText={setEmail}
+                />               
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
                     placeholderTextColor="#281483"
                     secureTextEntry={true}
+                    onChangeText={setPassword}
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("TabNavigator")}>
+                <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
             </View>

@@ -33,11 +33,11 @@ export const LoginSlide = () => {
                     </View>
                 </View>
                 <View style={styles.slideButtonContainer}>
-                    <TouchableOpacity style={[styles.slideButton, { marginLeft: '-2%' }]}>
-                        <Text style={styles.buttonText} onPress={() => goToLogin()}>Sign In</Text>
+                    <TouchableOpacity style={[styles.slideButton, { marginLeft: '-2%' }]} onPress={() => goToLogin()}>
+                        <Text style={styles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.slideButton, { marginRight: '-2%', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius: 50, borderBottomLeftRadius: 50 }]}>
-                        <Text style={styles.buttonText}>Next</Text>
+                    <TouchableOpacity onPress={() => goToLogin()} style={[styles.slideButton, { marginRight: '-2%', borderTopRightRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius: 50, borderBottomLeftRadius: 50 }]}>
+                        <Text style={styles.buttonText}>Skip</Text>
                     </TouchableOpacity>
                 </View>
             </View>

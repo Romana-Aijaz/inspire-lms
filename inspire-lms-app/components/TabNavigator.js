@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Profile } from './Profile';
 import { Dashboard } from '../pages/dashboard';
 import { Icon } from '@rneui/themed';
+import { NavigationContainer } from '@react-navigation/native';
+
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -20,7 +22,7 @@ const TabNavigator = () => {
                 },
             }} />
             
-            <Tab.Screen name="Profile" component={Profile} options={{
+           <Tab.Screen name="Profile" component={Profile} options={{
                 tabBarIcon: ({ color, size }) => (
                     <Icon name="people" size={30} color={'gray'} />
                 ),
@@ -28,7 +30,7 @@ const TabNavigator = () => {
                     fontWeight: 'bold',
                     color: '#281483'
                 },
-            }} />
+            }} /> 
         </Tab.Navigator>
     );
 };
