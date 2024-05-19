@@ -2,11 +2,23 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Icon, Avatar } from '@rneui/themed';
+import { useSelector, useDispatch } from 'react-redux';
+import { setEmail, setPassword } from '../redux/reducers';
+import { CommonActions } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 export const Profile = ({ navigation }) => {
+
+    const dispatch = useDispatch();
     const handleLogout = () => {
-       navigation.push('Login');
+        console.log("Logging out...");
+        dispatch(setEmail(''));
+        dispatch(setPassword(''));
     };
+    const email = useSelector(state => state.auth.email);
+    const fullName = useSelector(state => state.auth.fullName);
+    const contact = useSelector(state => state.auth.contact);
+    const university = useSelector(state => state.auth.university);
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -44,17 +56,17 @@ export const Profile = ({ navigation }) => {
                         </View>
                     </View>
                     <View style={styles.profileNameContainer}>
-                        <Text style={styles.profileName}>Romana Aijaz</Text>
-                        <Text style={styles.profileEmail}>romanaaijaz99@gmail.com</Text>
+                        <Text style={styles.profileName}>{fullName ? fullName : 'Name not available'}</Text>
+                        <Text style={styles.profileEmail}>{email ? email : 'Email not available'}</Text>
                     </View>
                     <View style={styles.infoCardContainer}>
                         <View style={[styles.infoCard, styles.yellowCard]}>
                             <Text style={styles.infoHeading}>University</Text>
-                            <Text style={styles.infoText}>California</Text>
+                            <Text style={styles.infoText}>{university ? university : 'University not available'}</Text>
                         </View>
                         <View style={[styles.infoCard, styles.purpleCard]}>
                             <Text style={styles.infoHeading}>Mobile Number</Text>
-                            <Text style={styles.infoText}>77208135</Text>
+                            <Text style={styles.infoText}>{contact ? contact : 'Contact not available'}</Text>
                         </View>
                     </View>
                     <View style={styles.listCardContainer}>

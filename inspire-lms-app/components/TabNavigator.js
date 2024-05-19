@@ -3,12 +3,32 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Profile } from './Profile';
 import { Dashboard } from '../pages/dashboard';
 import { Icon } from '@rneui/themed';
-import { NavigationContainer } from '@react-navigation/native';
-
 const Tab = createBottomTabNavigator();
+import { useSelector } from 'react-redux';
+import { LoginScreen } from '../pages/loginScreen';
+import { useNavigation, CommonActions } from '@react-navigation/native';
+const TabNavigator = ({navigation}) => {
+    const email = useSelector(state => state.auth.email);
+    const password = useSelector(state => state.auth.password);
 
-const TabNavigator = () => {
-    return (
+    if (email == undefined || email == '') {
+        navigation.dispatch(CommonActions.goBack());
+        return;
+        // <Tab.Navigator screenOptions={{
+        //     headerShown: false
+        // }} detachInactiveScreens={false}> 
+        //         <Tab.Screen name="Login" component={LoginScreen} options={{
+        //             tabBarIcon: ({ color, size }) => (
+        //                 <Icon name="home" size={30} color={'gray'} />
+        //             ),
+        //             tabBarLabelStyle: {
+        //                 fontWeight: 'bold',
+        //                 color: '#281483'
+        //             },
+        //         }} />
+        // </Tab.Navigator>      
+    }
+    return (  
         <Tab.Navigator screenOptions={{
             headerShown: false
         }} detachInactiveScreens={false}>

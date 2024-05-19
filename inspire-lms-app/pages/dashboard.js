@@ -8,9 +8,10 @@ import Svg, {
     Use,
     Image as SvgImage, Circle, SvgUri
 } from 'react-native-svg';
-
+import { useSelector } from 'react-redux';
 import TabMenu from "../components/TabMenu";
 export const Dashboard = () => {
+    const fullName = useSelector(state => state.auth.fullName);
     const [search, setSearch] = useState("");
     const updateSearch = (search) => {
         setSearch(search);
@@ -62,7 +63,7 @@ export const Dashboard = () => {
                 </View>
                 <View style={styles.nameHeadingContainer}>
                     <Text style={styles.nameHeadingText}>Welcome back,</Text>
-                    <Text style={styles.nameHeadingText}>Romana!</Text>
+                    <Text style={styles.nameHeadingText}>{fullName ? fullName : ''}</Text>
                 </View>
                 <View style={styles.searchBarContainer}>
                     <SearchBar

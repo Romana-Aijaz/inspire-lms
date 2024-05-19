@@ -6,7 +6,7 @@ export const DetailSlide = () => {
     const navigation = useNavigation();
 
     const goToLogin = () => {
-        navigation.navigate('Login');
+        navigation.navigate('TabNavigator');
     };
     return (
         <LinearGradient

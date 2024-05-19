@@ -1,28 +1,46 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
+import { setContact, setEmail, setPassword, setUniversity, setFullName } from '../redux/reducers';
 
 const users = [
-    { email: 'user1@example.com', password: 'password123' },
-    { email: 'user2@example.com', password: 'abc123' },
-    { email: 'user3@example.com', password: 'qwerty' },
+    { email: 'alielara@gmail.com', password: 'password123', contact: '77208135', fullName: 'Alie Lara', university: 'Harvard' },
+    { email: 'romanaaijaz@gmail.com', password: 'abc123', contact: '77256735', fullName: 'Romana Aijaz', university: 'California' },
+    { email: 'mishelkatherine@example.com', password: 'qwerty', contact: '77256795', fullName: 'Mishel Kat', university: 'Oxford' },
 ];
 
-export const LoginScreen = ({navigation}) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+export const LoginScreen = ({ navigation }) => {
+    const [newEmail, setNewEmail] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const dispatch = useDispatch();
+    const email = useSelector(state => state.auth.email);
+    const password = useSelector(state => state.auth.password);
+
+    const handleEmailChange = (newEmail) => {
+        setNewEmail(newEmail);
+    };
+
+    const handlePasswordChange = (newPassword) => {
+        setNewPassword(newPassword);
+    };
 
     // Function to handle login
     const handleLogin = () => {
-        if (!email.trim() || !password.trim()) {
+        console.log("Logging in...");
+        if (!newEmail.trim() || !newPassword.trim()) {
             Alert.alert('Incomplete Information', 'Please fill in both email and password fields.');
             return;
         }
 
-        const user = users.find(user => user.email === email);
+        const user = users.find(user => user.email === newEmail);
         if (user) {
-            if (user.password === password) {
-                navigation.navigate("TabNavigator");
+            if (user.password === newPassword) {
+                dispatch(setEmail(newEmail));
+                dispatch(setPassword(newPassword));
+                dispatch(setFullName(user.fullName));
+                dispatch(setUniversity(user.university));
+                dispatch(setContact(user.contact));
             } else {
                 Alert.alert('Incorrect Password', 'Please enter the correct password.');
             }
@@ -60,14 +78,14 @@ export const LoginScreen = ({navigation}) => {
                     placeholder="Email"
                     placeholderTextColor="#281483"
                     keyboardType="email-address"
-                    onChangeText={setEmail}
-                />               
+                    onChangeText={handleEmailChange}
+                />
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
                     placeholderTextColor="#281483"
                     secureTextEntry={true}
-                    onChangeText={setPassword}
+                    onChangeText={handlePasswordChange}
                 />
             </View>
             <View style={styles.buttonContainer}>
@@ -75,7 +93,7 @@ export const LoginScreen = ({navigation}) => {
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
             </View>
-            <LinearGradient 
+            <LinearGradient
                 colors={['#D782D9', '#8F6ED5', '#281483']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -102,9 +120,9 @@ export const LoginScreen = ({navigation}) => {
 };
 const styles = StyleSheet.create({
     container: {
-       flex: 1,
-       alignSelf: 'flex-start',
-       position: 'relative'
+        flex: 1,
+        alignSelf: 'flex-start',
+        position: 'relative'
     },
     gradient: {
         position: 'absolute',
@@ -148,7 +166,7 @@ const styles = StyleSheet.create({
         width: '50%',
         position: 'absolute',
         top: '70%',
-       left: '60%'
+        left: '60%'
     },
     button: {
         backgroundColor: '#8F6ED9', // Button background color
