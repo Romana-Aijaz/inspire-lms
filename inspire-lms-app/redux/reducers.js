@@ -7,13 +7,19 @@ const authSlice = createSlice({
         email: '',
         fullName: '',
         password: '',
-        contact: '',
-        university: '',
-        coursesEnrolled: []
+        country: '',
+        username: '',
+        id: '',
+        coursesEnrolled: [],
+        authToken: '',
+        city: ''
     },
     reducers: {
         setEmail: (state, action) => {
             state.email = action.payload;
+        },
+        setCity: (state, action) => {
+            state.city = action.payload;
         },
         setFullName: (state, action) => {
             state.fullName = action.payload;
@@ -21,18 +27,27 @@ const authSlice = createSlice({
         setPassword: (state, action) => {
             state.password = action.payload;
         },
-        setContact: (state, action) => {
-            state.contact = action.payload;
+        setCountry: (state, action) => {
+            state.country = action.payload;
         },
-        setUniversity: (state, action) => {
-            state.university = action.payload;
+        setUsername: (state, action) => {
+            state.username = action.payload;
+        },
+        setId: (state, action) => {
+            state.id = action.payload;
         },
         enrollCourse: (state, action) => {
             state.coursesEnrolled.push(action.payload);
+        },
+        setCoursesEnrolled: (state, action) => {
+            state.coursesEnrolled = action.payload;
+        },
+        setAuthToken: (state, action) => {
+            state.authToken = action.payload;
         }
     }
 });
 
-export const { setEmail, setPassword, setUniversity, enrollCourse, setContact, setFullName } = authSlice.actions;
+export const { setEmail, setPassword, setCity, enrollCourse, setCountry, setFullName, setUsername, setId, setAuthToken, setCoursesEnrolled } = authSlice.actions;
 export default authSlice.reducer;
 

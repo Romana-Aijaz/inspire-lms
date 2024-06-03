@@ -1,24 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useDispatch, useSelector } from 'react-redux';
-import { setContact, setEmail, setPassword, setUniversity, setFullName } from '../redux/reducers';
+import { useDispatch } from 'react-redux';
+import { setCountry, setCity, setEmail, setPassword, setFullName, setUsername, setId, setAuthToken, setCoursesEnrolled } from '../redux/reducers';
+import axios from 'axios';
 
-const users = [
-    { email: 'alielara@gmail.com', password: 'password123', contact: '77208135', fullName: 'Alie Lara', university: 'Harvard' },
-    { email: 'romanaaijaz@gmail.com', password: 'abc123', contact: '77256735', fullName: 'Romana Aijaz', university: 'California' },
-    { email: 'mishelkatherine@example.com', password: 'qwerty', contact: '77256795', fullName: 'Mishel Kat', university: 'Oxford' },
-];
+
+async function getUsersByField(token, fieldName, fieldValue) {
+    try {
+        const response = await axios.get('https://lmsdemo.inspire.qa/webservice/rest/server.php', {
+            params: {
+                wstoken: token,
+                wsfunction: 'core_user_get_users_by_field',
+                field: fieldName, // Field to search for (e.g., username, email)
+                values: [fieldValue], // Value of the field to search for
+                moodlewsrestformat: 'json'
+            }
+        });
+
+        // Assuming user data is returned in the response
+        const users = response.data;
+        if (users.length === 0) {
+            // No user found with the given value
+            return 'User is not registered.';
+        }
+        return users;
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw new Error('Failed to retrieve users by field due to an unknown error.');
+    }
+}
+
+async function getToken(username, password) {
+    try {
+        const response = await axios.get('https://lmsdemo.inspire.qa/login/token.php', {
+            params: {
+                username: username,
+                password: password,
+                service: 'moodle_mobile_app'
+            }
+        });
+
+        if (response.data && response.data.token) {
+            return response.data.token;
+        } else {
+            throw new Error('Failed to retrieve token: ', response.data);
+        }
+    } catch (error) {
+        throw new Error('Error fetching token: ', error.message);
+    }
+}
 
 export const LoginScreen = ({ navigation }) => {
-    const [newEmail, setNewEmail] = useState('');
+    const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const dispatch = useDispatch();
-    const email = useSelector(state => state.auth.email);
-    const password = useSelector(state => state.auth.password);
 
-    const handleEmailChange = (newEmail) => {
-        setNewEmail(newEmail);
+    const dispatch = useDispatch();
+
+    const handleUsernameChange = (newUsername) => {
+        setNewUsername(newUsername);
     };
 
     const handlePasswordChange = (newPassword) => {
@@ -26,26 +66,35 @@ export const LoginScreen = ({ navigation }) => {
     };
 
     // Function to handle login
-    const handleLogin = () => {
+    const handleLogin = async () => {
         console.log("Logging in...");
-        if (!newEmail.trim() || !newPassword.trim()) {
+        if (!newUsername.trim() || !newPassword.trim()) {
             Alert.alert('Incomplete Information', 'Please fill in both email and password fields.');
             return;
         }
-
-        const user = users.find(user => user.email === newEmail);
-        if (user) {
-            if (user.password === newPassword) {
-                dispatch(setEmail(newEmail));
-                dispatch(setPassword(newPassword));
-                dispatch(setFullName(user.fullName));
-                dispatch(setUniversity(user.university));
-                dispatch(setContact(user.contact));
-            } else {
-                Alert.alert('Incorrect Password', 'Please enter the correct password.');
+        try {
+            const token = await getToken(newUsername, newPassword);
+            if (token) {
+                console.log(token)
+                const userInfo = await getUsersByField(token, 'username', newUsername);
+                console.log(userInfo)
+                const user = userInfo.find(user => user.username === newUsername);
+                if (user) {
+                    dispatch(setEmail(user.email));
+                    {user.city ? dispatch(setCity(user.city)) : null}
+                    dispatch(setUsername(user.username));
+                    dispatch(setPassword(newPassword));
+                    dispatch(setFullName(user.fullname));
+                    { user.country ? dispatch(setCountry(user.country)) : null}
+                    dispatch(setId(user.id));
+                    dispatch(setCoursesEnrolled(user.enrolledcourses || []));
+                    dispatch(setAuthToken(token))
+                } else {
+                    Alert.alert('Not Registered', 'You are not registered in the system.');
+                }
             }
-        } else {
-            Alert.alert('Not Registered', 'You are not registered. Please sign up first.');
+        } catch (error) {
+            Alert.alert('Invalid login, please try again');
         }
     };
     return (
@@ -75,10 +124,10 @@ export const LoginScreen = ({ navigation }) => {
             <View style={styles.loginContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Email"
+                    placeholder="Username"
                     placeholderTextColor="#281483"
                     keyboardType="email-address"
-                    onChangeText={handleEmailChange}
+                    onChangeText={handleUsernameChange}
                 />
                 <TextInput
                     style={styles.input}

@@ -17,8 +17,8 @@ export const Profile = ({ navigation }) => {
     };
     const email = useSelector(state => state.auth.email);
     const fullName = useSelector(state => state.auth.fullName);
-    const contact = useSelector(state => state.auth.contact);
-    const university = useSelector(state => state.auth.university);
+    const country = useSelector(state => state.auth.country);
+    const city = useSelector(state => state.auth.city);
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -61,12 +61,12 @@ export const Profile = ({ navigation }) => {
                     </View>
                     <View style={styles.infoCardContainer}>
                         <View style={[styles.infoCard, styles.yellowCard]}>
-                            <Text style={styles.infoHeading}>University</Text>
-                            <Text style={styles.infoText}>{university ? university : 'University not available'}</Text>
+                            <Text style={styles.infoHeading}>City</Text>
+                            <Text style={styles.infoText}>{city ? city : 'City not available'}</Text>
                         </View>
                         <View style={[styles.infoCard, styles.purpleCard]}>
-                            <Text style={styles.infoHeading}>Mobile Number</Text>
-                            <Text style={styles.infoText}>{contact ? contact : 'Contact not available'}</Text>
+                            <Text style={styles.infoHeading}>Country</Text>
+                            <Text style={styles.infoText}>{country ? country : 'Country not available'}</Text>
                         </View>
                     </View>
                     <View style={styles.listCardContainer}>

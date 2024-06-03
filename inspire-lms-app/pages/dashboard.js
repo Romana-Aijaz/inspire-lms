@@ -1,17 +1,81 @@
 import {
-    View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Image,  StatusBar
+    View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Image, StatusBar
 } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Avatar, Badge, ButtonGroup, SearchBar, Icon } from '@rneui/themed';
-import { useState } from "react";
-import Svg, {
-    Use,
-    Image as SvgImage, Circle, SvgUri
-} from 'react-native-svg';
+import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
+import { setCoursesEnrolled } from '../redux/reducers';
 import TabMenu from "../components/TabMenu";
-export const Dashboard = () => {
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+
+
+const getCoursesByField = async (field, value, token) => {
+    try {
+        const response = await axios.get(`https://lmsdemo.inspire.qa/webservice/rest/server.php`, {
+            params: {
+                wstoken: token,
+                wsfunction: 'core_course_get_courses_by_field',
+                moodlewsrestformat: 'json',
+                field: field,
+                value: value
+            }
+        });
+        return response.data.courses;
+    } catch (error) {
+        console.error('Error fetching courses by field:', error);
+        return [];
+    }
+};
+
+async function getUserCourses(token, classification) {
+    try {
+        const response = await axios.get('https://lmsdemo.inspire.qa/webservice/rest/server.php', {
+            params: {
+                wstoken: token,
+                wsfunction: 'core_course_get_enrolled_courses_by_timeline_classification',
+                moodlewsrestformat: 'json',
+                classification: classification
+            }
+        });
+        const courses = response.data.courses;
+        return courses;
+    } catch (error) {
+        console.error('Failed to get user courses:', error);
+        return [];
+    }
+}
+
+export const Dashboard = ({ navigation }) => {
     const fullName = useSelector(state => state.auth.fullName);
+    const enrolledCourses = useSelector(state => state.auth.coursesEnrolled);
+    const authToken = useSelector(state => state.auth.authToken);
+    const id = useSelector(state => state.auth.id);
+    const [fetchedCourses, setFetchedCourses] = useState([]);
+    console.log(authToken)
+    console.log(id)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const fetchCourses = async () => {
+            if (authToken) {
+                const courses = await getUserCourses(authToken, 'inprogress');
+                if (courses) {
+
+                    // Fetch detailed courses by ID
+                    const fetchedCourses = await Promise.all(
+                        courses.map(course => getCoursesByField('id', course.id, authToken))
+                    );
+                    setFetchedCourses(fetchedCourses.flat()); // Flatten the array of arrays
+                    const flattenedCourses = fetchedCourses.flat(); // Flatten the array of arrays
+                    dispatch(setCoursesEnrolled(flattenedCourses));
+                }
+            }
+        };
+
+        fetchCourses();
+    }, [authToken, id, dispatch]);
+console.log(fetchedCourses)
     const [search, setSearch] = useState("");
     const updateSearch = (search) => {
         setSearch(search);
@@ -22,17 +86,10 @@ export const Dashboard = () => {
     const handleTabSelect = (index) => {
         setSelectedTab(index);
     };
-    const cardsData = [
-        { id: 1, title: "Adobe Illustrator", description: "Description for Card 1", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/adobe.svg" },
-        { id: 2, title: "Python", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/python.svg" },
-        { id: 3, title: "Problem Solving", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/raleigh.svg" },
-        { id: 4, title: "Time Management", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/dst.svg"},
-        { id: 5, title: "Adobe Illustrator", description: "Description for Card 1", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/adobe.svg" },
-        { id: 6, title: "Python", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/python.svg" },
-        { id: 7, title: "Problem Solving", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/raleigh.svg" },
-        { id: 8, title: "Time Management", description: "Description for Card 2", image: "https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/dst.svg" }
-        // Add more cards as needed
-    ];
+
+    const handleCoursePress = (course) => {
+        navigation.navigate('Course', { course });
+    };
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -52,12 +109,12 @@ export const Dashboard = () => {
                         />
                         <Badge
                             status="success"
-                            containerStyle={{ position: 'absolute', top: 40, left: 75 }}
+                            containerStyle={{ position: 'absolute', top: 45, left: 72 }}
                         />
                     </View>
                     <View style={styles.menu}>
                         <TouchableOpacity>
-                            <Icon name="menu" size={30} color={'white'}/>
+                            <Icon name="menu" size={30} color={'white'} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -84,28 +141,26 @@ export const Dashboard = () => {
                     />
                 </View>
             </LinearGradient>
-                <TabMenu tabs={tabs} selectedTab={selectedTab} onSelect={handleTabSelect} />
+            <TabMenu tabs={tabs} selectedTab={selectedTab} onSelect={handleTabSelect} />
             <SafeAreaView style={styles.safeAreaViewContainer}>
-            <ScrollView style={styles.cardsContainer}>
-                {cardsData.map((card) => (
-                    <TouchableOpacity key={card.id} style={styles.card}>
-                        <View style={styles.cardIcon}>
-                            {/* <Image source={require('../assets/adobe.png')} style={styles.iconImage} /> */}
-                            <Svg width="80" height="80" viewBox="0 0 100 100" >
-                                <SvgUri
-                                    width="100%"
-                                    height="100%"
-                                    uri={card.image}
-                                />
-                            </Svg>
-                        </View>
-                        <View key={card.id} style={styles.cardTextContainer}>
-                            <Text style={styles.cardTitle}>{card.title}</Text>
-                            <Text style={styles.cardDescription}>{card.description}</Text>
-                        </View>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
+                <ScrollView style={styles.cardsContainer}>
+                    {enrolledCourses.length > 0 ? (
+                        enrolledCourses.map((course) => (
+                            <TouchableOpacity key={course.id} style={styles.card} onPress={() => handleCoursePress(course)}>
+                                <View style={styles.cardIcon}>
+                                    <Image source={{ uri: course.overviewfiles[0].fileurl +'?token='+authToken }}
+                                        style={styles.iconImage} resizeMode="cover" />
+                                </View>
+                                <View style={styles.cardTextContainer}>
+                                    <Text style={styles.cardTitle}>{course.shortname}</Text>
+                                    <Text style={styles.cardDescription}>{course.fullname}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    ) : (<View style={styles.noCoursesText}>
+                        <Text style={styles.noCoursesText}>No courses enrolled</Text>
+                    </View>)}
+                </ScrollView>
             </SafeAreaView>
         </View>
     );
@@ -198,15 +253,21 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     iconImage: {
-        width: 50, // Adjust width and height as needed
-        height: 50,
+        width: 60, // Adjust width and height as needed
+        height: 60,
         borderRadius: 10
     },
     safeAreaViewContainer: {
         flex: 1,
-        position:'absolute',
+        position: 'absolute',
         width: '100%',
         height: '50%',
         top: '50%'
+    },
+    noCoursesText: {
+        padding: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+        alignItems: 'center'
     }
 });
