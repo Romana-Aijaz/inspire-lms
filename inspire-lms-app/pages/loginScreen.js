@@ -40,7 +40,6 @@ async function getToken(username, password) {
                 service: 'moodle_mobile_app'
             }
         });
-
         if (response.data && response.data.token) {
             return response.data.token;
         } else {

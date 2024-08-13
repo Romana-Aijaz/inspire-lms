@@ -88,7 +88,7 @@ console.log(fetchedCourses)
     };
 
     const handleCoursePress = (course) => {
-        navigation.navigate('Course', { course });
+        navigation.navigate('Course', { course, enrolled: true });
     };
     return (
         <View style={styles.container}>

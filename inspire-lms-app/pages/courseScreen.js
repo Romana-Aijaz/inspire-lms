@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, TextInput, Alert, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, TextInput, ActivityIndicator, Alert, Image, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Rating } from 'react-native-ratings';
 import { useSelector } from 'react-redux';
@@ -27,17 +27,20 @@ const getCourseContents = async (courseId, TOKEN) => {
     }
 };
 
-export const CourseScreen = () => {
+export const CourseScreen = ({ navigation }) => {
     const route = useRoute();
     const authToken = useSelector(state => state.auth.authToken);
     const [courseContents, setCourseContents] = useState([]);
-
+    const [loading, setLoading] = useState(true);
     const { course } = route.params;
-
+    const {enrolled} = route.params;
+    console.log('enrolled')
+    console.log(enrolled)
     useEffect(() => {
         const fetchCourseContents = async () => {
             const contents = await getCourseContents(course.id, authToken);
             setCourseContents(contents);
+            setLoading(false);
         };
 
         fetchCourseContents();
@@ -46,50 +49,52 @@ export const CourseScreen = () => {
     console.log(courseContents)
     console.log(course)
 
+    const handleModuleClick = () => {
+        navigation.navigate('CourseContents', {courseId: course.id})
+    }
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.courseMainContainer}>
-            <View style={styles.courseHeadingContainer}><Text style={styles.courseHeading}>{course.categoryname ? course.categoryname : 'category'}</Text></View>
-            <View style={styles.courseImageContainer}>
-                <Image source={{ uri: course.overviewfiles[0].fileurl + '?token=' + authToken }}
-                    style={styles.courseImage}
-                    resizeMode="cover" 
-                />
-            </View>
-            <View style={styles.courseDetailsContainer}>
-                <View style={styles.courseTitleContainer}>
-                    <Text style={styles.courseTitle}>{course.fullname ? course.fullname : 'Course Name'}</Text>
-                    <Text style={styles.coursePrice}>$300</Text>
+            <View style={styles.courseMainContainer}>
+                <View style={styles.courseHeadingContainer}><Text style={styles.courseHeading}>{course.categoryname ? course.categoryname : 'category'}</Text></View>
+                <View style={styles.courseImageContainer}>
+                    <Image source={{ uri: course.overviewfiles[0].fileurl + '?token=' + authToken }}
+                        style={styles.courseImage}
+                        resizeMode="cover"
+                    />
                 </View>
-                <Text style={styles.courseDescription}>{course.summary ? stripHtmlTags(course.summary) : 'Summary of the course'}</Text>
-            </View>
-                <View style={styles.courseContentsContainer}>
-                    {courseContents.map((content, index) => (
+                <View style={styles.courseDetailsContainer}>
+                    <View style={styles.courseTitleContainer}>
+                        <Text style={styles.courseTitle}>{course.fullname ? course.fullname : 'Course Name'}</Text>
+                        <Text style={styles.coursePrice}>{!enrolled ? '$300' : ''}</Text>
+                    </View>
+                    <Text style={styles.courseDescription}>{course.summary ? stripHtmlTags(course.summary) : 'Summary of the course'}</Text>
+                </View>
+                <View style={styles.courseContentsContainer}>{loading ? (
+                    <ActivityIndicator size="large" color="#00ff00" />
+                ) : enrolled ? (
+                    courseContents.map((content, index) => (
                         <View key={index} style={styles.courseContent}>
                             <Text style={styles.courseContentTitle}>{content.name}</Text>
                             {content.modules.map((module, modIndex) => (
-                                <TouchableOpacity key={modIndex} style={styles.moduleContainer}>
+                                <TouchableOpacity key={modIndex} style={styles.moduleContainer} onPress={() => handleModuleClick()}>
                                     <Text style={styles.moduleTitle}>{module.name}</Text>
-                                    <Image source={{ uri: 'https://lmsdemo.inspire.qa/theme/image.php/edumy/scorm/1703058046/icon?token=eb602c793c134ef97610bb60d3559898' }} resizeMode="cover" />
-                                    {console.log(module.modicon)}
+                                    {console.log(module)}
                                 </TouchableOpacity>
-                               
                             ))}
                         </View>
-                    ))}
-                </View>
-            <View style={styles.ratingContainer}>
-                <Rating
-                    showRating
-                    onFinishRating={(rating) => console.log('Rating is: ' + rating)}
-                    style={{ paddingVertical: 10 }}
-                />
+                    ))
+                ) : ''}
+                </View>{!enrolled ? (<View style={styles.ratingContainer}>
+                    <Rating
+                        showRating
+                        onFinishRating={(rating) => console.log('Rating is: ' + rating)}
+                        style={{ paddingVertical: 10 }}
+                    />
+                </View>) : ''}
+                {!enrolled ? (<TouchableOpacity style={styles.addToCartButton}>
+                    <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+                </TouchableOpacity>) : ''}
             </View>
-                <Image source={{ uri: 'https://lmsdemo.inspire.qa/webservice/theme/image.php/edumy/scorm/1703058046/icon?token=eb602c793c134ef97610bb60d3559898' }} resizeMode="cover" />
-            <TouchableOpacity style={styles.addToCartButton}>
-                <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-            </TouchableOpacity>
-        </View>
         </ScrollView>
     );
 };
