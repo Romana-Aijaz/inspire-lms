@@ -10,6 +10,7 @@ export default function App() {
       <StatusBar style="auto" />
       <Text>Hii</Text>
       <Text>Hii</Text>
+      <Text>Open up App.js to start working on your app!</Text>
     </View>
   );
 }
