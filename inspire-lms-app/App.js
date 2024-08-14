@@ -8,6 +8,8 @@ export default function App() {
       <Text>Change in Main Brach</Text>
       <Text>Let's test this</Text>
       <StatusBar style="auto" />
+      <Text>Hii</Text>
+      <Text>Hii</Text>
     </View>
   );
 }
